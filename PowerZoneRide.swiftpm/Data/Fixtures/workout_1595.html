@@ -1,0 +1,1280 @@
+<HTML>
+<HEAD>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-154656010-1"></script>
+<script data-ad-client="ca-pub-9914893628950868" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-154656010-1');
+</script>
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="194x194" href="/favicon-194x194.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+<meta property="og:image" content="https://app.homefitnessbuddy.com/img/PowerZoneToolPreview.png" />
+<meta property="og:image:secure_url" content="https://app.homefitnessbuddy.com/img/PowerZoneToolPreview.png" />
+<meta property="og:image:width" content="1280" />
+<meta property="og:image:height" content="630" />
+<meta property="og:description" content="The Home Fitness Buddy Power Zone Timing Tool for Peloton.  Zone changes and calls for the 60 minute Pro Cyclist class with Christian Vande Velde on 03/25/26 @ 12:00AM ET" />
+
+  <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<script src="/js/confetti.min.js"></script>
+<script src="/js/NoSleep.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/0.5.7/chartjs-plugin-annotation.min.js"></script>
+<script src="/js/chartjs-plugin-watermark.js"></script>
+
+<TITLE>Peloton Power Zone Companion Timer - 60 Minute Pro Cyclist with Christian Vande Velde on 03/25/26 @ 12:00AM ET | Home Fitness Buddy</TITLE>
+<link rel="stylesheet" href="/css/timer.css?v=20200427"> <!-- Resource style -->
+<style type='text/css'>
+/* Temp fields to let cache clear, they should also be in timer.css */
+.blinking{
+    animation:blinkingText 1.0s infinite;
+}
+
+body {
+  --c: black;
+}
+
+
+@keyframes blinkingText{
+    0%{     color: var(--c);    }
+    49%{    color: var(--c); }
+    60%{    color: transparent; }
+    99%{    color:transparent;  }
+    100%{   color: var(--c);    }
+}
+
+#rotateTip {
+  display:none;
+}
+@media (orientation: portrait) {
+  @media (pointer:none), (pointer:coarse) {
+    #rotateTip {
+      display:block;
+    }
+  }
+}
+
+</style>
+
+
+<script type='text/javascript'>
+
+  var noSleep = new NoSleep();
+
+  function isFacebookApp() {
+      var ua = navigator.userAgent || navigator.vendor || window.opera;
+      return (ua.indexOf("FBAN") > -1) || (ua.indexOf("FBAV") > -1);
+  } 
+  // Temporarily using minutes for the 3 ints.  These need to be seconds.  Also change the parse loop to remove the extra * 60 there.
+   var intervals = [
+   [0,180,'I','SUA',30,'1',30,'SUA',30],
+[180,30,'SUA','1',30,'SUA',30,'1',30],
+[210,30,'1','SUA',30,'1',30,'SUA',30],
+[240,30,'SUA','1',30,'SUA',30,'1',30],
+[270,30,'1','SUA',30,'1',30,'2',120],
+[300,30,'SUA','1',30,'2',120,'3',120],
+[330,30,'1','2',120,'3',120,'1',60],
+[360,120,'2','3',120,'1',60,'4',120],
+[480,120,'3','1',60,'4',120,'1',120],
+[600,60,'1','4',120,'1',120,'5',30],
+[660,120,'4','1',120,'5',30,'1',30],
+[780,120,'1','5',30,'1',30,'5',30],
+[900,30,'5','1',30,'5',30,'1',30],
+[930,30,'1','5',30,'1',30,'5',30],
+[960,30,'5','1',30,'5',30,'1',30],
+[990,30,'1','5',30,'1',30,'3',120],
+[1020,30,'5','1',30,'3',120,'2',120],
+[1050,30,'1','3',120,'2',120,'3',120],
+[1080,120,'3','2',120,'3',120,'2',120],
+[1200,120,'2','3',120,'2',120,'4',210],
+[1320,120,'3','2',120,'4',210,'1',210],
+[1440,120,'2','4',210,'1',210,'3',120],
+[1560,210,'4','1',210,'3',120,'2',60],
+[1770,210,'1','3',120,'2',60,'3',120],
+[1980,120,'3','2',60,'3',120,'2',60],
+[2100,60,'2','3',120,'2',60,'3',120],
+[2160,120,'3','2',60,'3',120,'1',30],
+[2280,60,'2','3',120,'1',30,'4',270],
+[2340,120,'3','1',30,'4',270,'5',30],
+[2460,30,'1','4',270,'5',30,'1',30],
+[2490,270,'4','5',30,'1',30,'5',30],
+[2760,30,'5','1',30,'5',30,'1',30],
+[2790,30,'1','5',30,'1',30,'3',90],
+[2820,30,'5','1',30,'3',90,'6',30],
+[2850,30,'1','3',90,'6',30,'CD',600],
+[2880,90,'3','6',30,'CD',600,'',],
+[2970,30,'6','CD',600,'',,'',],
+[3000,600,'CD','END',0,'',,'',],
+  ];
+
+  const 
+      classLength = 3600 * 1000,
+      second = 1000,
+      minute = second * 60,
+      hour = minute * 60,
+      day = hour * 24;
+  k=0;
+
+  let countDown = classLengthLeft = classLength,
+      currentIntervalTimer = 0;
+
+  systemTimeToEnd = null;
+  intervalsArray = [];
+  jArray = [];
+  startIntervalTimeBlocks = [];
+
+  function updateBlock(currentZone, id) {
+    switch(currentZone) {
+      case 'WU':
+        document.getElementById(id).innerText = "Warm Up";
+        break;
+      case 'CD':
+        document.getElementById(id).innerText = "Cool Down";
+        break;
+      case 'END':
+        document.getElementById(id).innerText = "Ride Completion";
+        break;
+      case 'SS':
+        document.getElementById(id).innerText = "Sweet Spot";
+        break;
+      case 'SU':
+        document.getElementById(id).innerText = "Spin-Up";
+        break;
+      case 'SUA':
+        document.getElementById(id).innerText = "Several Spin-Ups";
+        break;
+      case 'I':
+        document.getElementById(id).innerText = "Flat Road";
+        break;
+      default:
+        document.getElementById(id).innerText = "Z" + currentZone;
+        break;
+    }
+  }
+  function updateStatic(intervalLength, currentZone, nextZone, nextZoneLength, nextZone2, nextZoneLength2, nextZone3, nextZoneLength3) {
+    var cmin =  Math.floor((intervalLength % (hour)) / (minute));
+    var csec =  Math.floor((intervalLength % (minute)) / second);
+    var nmin =  Math.floor((nextZoneLength % (hour)) / (minute));
+    var nsec =  Math.floor((nextZoneLength % (minute)) / second);
+    var n2min =  Math.floor((nextZoneLength2 % (hour)) / (minute));
+    var n2sec =  Math.floor((nextZoneLength2 % (minute)) / second);
+    var n3min =  Math.floor((nextZoneLength3 % (hour)) / (minute));
+    var n3sec =  Math.floor((nextZoneLength3 % (minute)) / second);
+    if (cmin.toString().length == 1) {
+      cmin = "0" + cmin;
+    }
+    if (csec.toString().length == 1) {
+      csec = "0" + csec;
+    }
+    if (nmin.toString().length == 1) {
+      nmin = "0" + nmin;
+    }
+    if (nsec.toString().length == 1) {
+      nsec = "0" + nsec;
+    }
+    if (n2min.toString().length == 1) {
+      n2min = "0" + n2min;
+    }
+    if (n2sec.toString().length == 1) {
+      n2sec = "0" + n2sec;
+    }
+    if (n3min.toString().length == 1) {
+      n3min = "0" + n3min;
+    }
+    if (n3sec.toString().length == 1) {
+      n3sec = "0" + n3sec;
+    }
+    document.getElementById('currentZoneTime').innerText = cmin + ":" + csec;
+    document.getElementById('currentZoneNum').classList.remove("smallFontCurrentZone");
+    document.getElementById('currentZoneNum').classList.remove("bigFontCurrentZone");
+    if (currentZone == "WU" || currentZone == "CD" || currentZone == "SS" || currentZone == "SU" || currentZone == "SUA" || currentZone == "I") {
+      document.getElementById('currentZoneNum').classList.add("smallFontCurrentZone");
+    } else {
+      document.getElementById('currentZoneNum').classList.add("bigFontCurrentZone");
+    }
+    updateBlock(currentZone, 'currentZoneNum' );
+    updateBlock(nextZone, 'nextZoneNum' );
+    document.getElementById('nextZoneTime').innerText = nmin + ":" + nsec;
+    if (nextZone2) {
+      updateBlock(nextZone2, 'nextZoneNum2' );
+      document.getElementById('nextZoneTime2').innerText = n2min + ":" + n2sec;
+    } else {
+      document.getElementById('nextZone2Block').style.display="none";
+    }
+    if (nextZone3) {
+      updateBlock(nextZone3, 'nextZoneNum3' );
+      document.getElementById('nextZoneTime3').innerText = n3min + ":" + n3sec;
+    } else {
+      document.getElementById('nextZone3Block').style.display="none";
+    }
+  }
+
+  var startTime, currentZone, nextZone, nextZone2, nextZone3, nextZoneLength,nextZoneLength2, nextZoneLength3, currentIntervalEndTime;
+  var first=true;
+  var firstRun = true;
+  var singleInterval = null;
+  var sumTimeElapsed = 0;
+  var iLength = 0;
+  var resumed = false;
+  var resumeBuffer = 0;
+  var fullClassTimer = null;
+  
+
+  function resetDataAndStart() {
+     if (typeof(Storage) !== "undefined") {
+          if (localStorage.getItem("1595")) {
+            first=true;
+            singleInterval = null;
+            sumTimeElapsed = 0;
+            iLength = 0;
+            resumed = false;
+            resumeBuffer = 0;
+            classLengthLeft = classLength;
+            intervals = [
+             [0,180,'I','SUA',30,'1',30,'SUA',30],
+[180,30,'SUA','1',30,'SUA',30,'1',30],
+[210,30,'1','SUA',30,'1',30,'SUA',30],
+[240,30,'SUA','1',30,'SUA',30,'1',30],
+[270,30,'1','SUA',30,'1',30,'2',120],
+[300,30,'SUA','1',30,'2',120,'3',120],
+[330,30,'1','2',120,'3',120,'1',60],
+[360,120,'2','3',120,'1',60,'4',120],
+[480,120,'3','1',60,'4',120,'1',120],
+[600,60,'1','4',120,'1',120,'5',30],
+[660,120,'4','1',120,'5',30,'1',30],
+[780,120,'1','5',30,'1',30,'5',30],
+[900,30,'5','1',30,'5',30,'1',30],
+[930,30,'1','5',30,'1',30,'5',30],
+[960,30,'5','1',30,'5',30,'1',30],
+[990,30,'1','5',30,'1',30,'3',120],
+[1020,30,'5','1',30,'3',120,'2',120],
+[1050,30,'1','3',120,'2',120,'3',120],
+[1080,120,'3','2',120,'3',120,'2',120],
+[1200,120,'2','3',120,'2',120,'4',210],
+[1320,120,'3','2',120,'4',210,'1',210],
+[1440,120,'2','4',210,'1',210,'3',120],
+[1560,210,'4','1',210,'3',120,'2',60],
+[1770,210,'1','3',120,'2',60,'3',120],
+[1980,120,'3','2',60,'3',120,'2',60],
+[2100,60,'2','3',120,'2',60,'3',120],
+[2160,120,'3','2',60,'3',120,'1',30],
+[2280,60,'2','3',120,'1',30,'4',270],
+[2340,120,'3','1',30,'4',270,'5',30],
+[2460,30,'1','4',270,'5',30,'1',30],
+[2490,270,'4','5',30,'1',30,'5',30],
+[2760,30,'5','1',30,'5',30,'1',30],
+[2790,30,'1','5',30,'1',30,'3',90],
+[2820,30,'5','1',30,'3',90,'6',30],
+[2850,30,'1','3',90,'6',30,'CD',600],
+[2880,90,'3','6',30,'CD',600,'',],
+[2970,30,'6','CD',600,'',,'',],
+[3000,600,'CD','END',0,'',,'',],
+            ];
+            if (fullClassTimer) {
+               clearInterval(fullClassTimer);
+            }
+          //  console.log("Quietly restarting class");
+            classStart(0);
+        }
+      }
+  }
+
+  document.addEventListener("visibilitychange", visChngF);
+  function visChngF() {
+    if (document.hidden) { } else {
+      //console.log("Window focus event");
+      resetDataAndStart();
+    }
+  }
+
+  /*
+  window.addEventListener('focus', focusHappenedF);
+  function focusHappenedF() {
+      console.log("Blur focus event");
+      resetDataAndStart();
+  }*/
+
+
+  var enableBeeps = false;
+  var darkMode = false;
+  var a;
+
+   (function ($) {
+    $(document).ready(function ($) {
+
+      $('#ffremove1con').click(function() {
+         systemTimeToEnd-=1000;
+         currentIntervalEndTime-=1000;
+         if (typeof(Storage) !== "undefined") {
+            if (localStorage.getItem("1595")) {
+              localStorage.setItem("1595",systemTimeToEnd);
+            }
+          }
+      });
+       $('#ffremove10con').click(function() {
+         systemTimeToEnd-=10000;
+         currentIntervalEndTime-=10000;
+         if (typeof(Storage) !== "undefined") {
+            if (localStorage.getItem("1595")) {
+              localStorage.setItem("1595",systemTimeToEnd);
+            }
+          }
+      });
+      $('#ffadd1con').click(function() {
+        systemTimeToEnd=parseInt(1000)+parseInt(systemTimeToEnd);
+        currentIntervalEndTime=parseInt(1000)+parseInt(currentIntervalEndTime);
+         if (typeof(Storage) !== "undefined") {
+            if (localStorage.getItem("1595")) {
+              localStorage.setItem("1595",systemTimeToEnd);
+            }
+          }
+      });
+      $('#ffadd10con').click(function() {
+        systemTimeToEnd=parseInt(10000)+parseInt(systemTimeToEnd);
+        currentIntervalEndTime=parseInt(10000)+parseInt(currentIntervalEndTime);
+         if (typeof(Storage) !== "undefined") {
+            if (localStorage.getItem("1595")) {
+              localStorage.setItem("1595",systemTimeToEnd);
+            }
+          }
+      });
+      $("#useAudio").change(function() {
+          if(this.checked) {
+            a = (new (window.AudioContext || window.webkitAudioContext)()); // browsers limit the number of concurrent audio contexts, so you better re-use'em 
+            a.createGain();
+            enableBeeps = true;
+          } else {
+            enableBeeps = false;
+          }
+          if (typeof(Storage) !== "undefined") {
+            localStorage.setItem("enableBeeps",enableBeeps);
+          }
+      });
+      $("#darkMode").change(function() {
+          if(this.checked) {
+            darkMode = true;
+            var element = document.body;
+            element.classList.add("darkMode");
+           jQuery('#ffremove1con').attr('src', (!darkMode ? '/img/Skip1.png' : '/img/Skip1Light.png'));
+           jQuery('#ffadd1con').attr('src', (!darkMode ? '/img/SkipBack.png' : '/img/SkipBackLight.png'));
+           jQuery('#ffremove10con').attr('src', (!darkMode ? '/img/Skip10.png' : '/img/Skip10Light.png'));
+           jQuery('#ffadd10con').attr('src', (!darkMode ? '/img/SkipBack10.png' : '/img/SkipBack10Light.png'));
+          } else {
+            darkMode = false;
+            var element = document.body;
+             element.classList.remove("darkMode");
+             jQuery('#ffremove1con').attr('src', (!darkMode ? '/img/Skip1.png' : '/img/Skip1Light.png'));
+             jQuery('#ffadd1con').attr('src', (!darkMode ? '/img/SkipBack.png' : '/img/SkipBackLight.png'));
+             jQuery('#ffremove10con').attr('src', (!darkMode ? '/img/Skip10.png' : '/img/Skip10Light.png'));
+             jQuery('#ffadd10con').attr('src', (!darkMode ? '/img/SkipBack10.png' : '/img/SkipBack10Light.png'));
+          }
+          if (typeof(Storage) !== "undefined") {
+            localStorage.setItem("darkMode",darkMode);
+          }
+      });
+    });
+  })(jQuery);
+
+  function beep(vol, freq, duration){
+    try {
+      v=a.createOscillator();
+      u=a.createGain()
+      v.connect(u)
+      v.frequency.value=freq
+      v.type="square"
+      u.connect(a.destination)
+      u.gain.value=vol*0.01
+      v.start(a.currentTime)
+      v.stop(a.currentTime+duration*0.001);
+    } catch (error) {
+      console.log("error");
+    }
+  }
+
+  function clearAndStart() {
+    localStorage.removeItem("1595");
+    classStart(0);
+  }
+  function classStart(doLog) {
+    if (firstRun) {
+      noSleep.enable(); // keep the screen on!
+      a = (new (window.AudioContext || window.webkitAudioContext)()); // browsers limit the number of concurrent audio contexts, so you better re-use'em 
+      a.createGain();
+      try {
+        if (doLog) {
+          $.post( "/peloton/powerzone/classstart.php", { class_id: "1595"});
+         }
+      }catch (error) {} 
+      //console.log("Setting a3");
+    }
+    firstRun = false;
+    document.getElementById('preClassBlock').style.display="none";
+    document.getElementById('countdownBlock').style.display="block";
+    document.getElementById('classCompletedBlock').style.display="none";
+    first=true;
+    singleInterval = null;
+    sumTimeElapsed = 0;
+    iLength = 0;
+    audioSet = false;
+    fullClassTimer = setInterval(function() { 
+      var currentTimestamp = Date.now();
+      if (first) {
+        if (typeof(Storage) !== "undefined") {
+          if (localStorage.getItem("1595")) {
+              systemTimeToEnd = localStorage.getItem("1595");
+              resumed = true;
+              if (currentTimestamp > systemTimeToEnd) {
+                 systemTimeToEnd = currentTimestamp + classLength;
+                 resumed = false;
+              }
+          } else {
+            systemTimeToEnd = currentTimestamp + classLength;
+          }
+          localStorage.setItem("1595",systemTimeToEnd);
+          if (localStorage.getItem("enableBeeps")) {
+            if (localStorage.getItem("enableBeeps") == "true") {
+              enableBeeps = true;
+              jQuery( "#useAudio" ).prop( "checked",  true);
+            }
+          } 
+          if (localStorage.getItem("darkMode")) {
+            if (localStorage.getItem("darkMode") == "true") {
+              darkMode = true;
+              jQuery( "#darkMode" ).prop( "checked",  true);
+              var element = document.body;
+              if (darkMode) {
+                element.classList.add("darkMode");
+              } else {
+                element.classList.remove("darkMode");
+              }
+             jQuery('#ffremove1con').attr('src', (!darkMode ? '/img/Skip1.png' : '/img/Skip1Light.png'));
+             jQuery('#ffadd1con').attr('src', (!darkMode ? '/img/SkipBack.png' : '/img/SkipBackLight.png'));
+             jQuery('#ffremove10con').attr('src', (!darkMode ? '/img/Skip10.png' : '/img/Skip10Light.png'));
+             jQuery('#ffadd10con').attr('src', (!darkMode ? '/img/SkipBack10.png' : '/img/SkipBack10Light.png'));
+            }
+          } 
+        } else {
+          systemTimeToEnd = currentTimestamp + classLength;
+        }
+      }
+      classLengthLeft = systemTimeToEnd - currentTimestamp;
+      if (classLengthLeft <= 0) {
+        localStorage.removeItem("1595");
+        document.getElementById('countdownBlock').style.display="none";
+        document.getElementById('classCompletedBlock').style.display="block";
+        confetti.start(15000);
+        clearInterval(fullClassTimer);
+        return;
+      }
+
+      if (first || currentTimestamp > currentIntervalEndTime) {
+        audioSet = false;
+        document.getElementById('timeCurrent').classList.remove("blinking");
+        if (resumed) {
+          var sumInt = 0;
+          do {
+            singleInterval = intervals.shift();
+            sumInt += (singleInterval[1]*1000);
+            sumTimeElapsed += (singleInterval[1]*1000);
+         //   console.log("Specifically comparing " + classLengthLeft + " and " + ((classLength )- sumInt) + "  and " + (classLengthLeft > ((classLength )- sumInt)));
+          } while (classLengthLeft < ((classLength )- sumInt));
+          resumed = false;
+          sumTimeElapsed -= (singleInterval[1]*1000);
+          resumeBuffer = singleInterval[1]*1000 - (systemTimeToEnd - currentTimestamp - (classLength-singleInterval[1]*1000) + sumTimeElapsed);
+         // console.log("Our resume buffer is " + resumeBuffer);
+          iLength = singleInterval[1]*1000;    
+          currentIntervalEndTime = currentTimestamp+iLength-resumeBuffer;
+        } else {
+          singleInterval = intervals.shift();
+          sumTimeElapsed += iLength; // Add the last interval onto what is elapsed so far
+          iLength = singleInterval[1]*1000;    
+          currentIntervalEndTime = currentTimestamp+iLength;
+        }
+        startTime = singleInterval[0]*1000;
+        iLength = singleInterval[1]*1000;    
+        currentZone = singleInterval[2];    
+        nextZone = singleInterval[3];    
+        nextZoneLength = singleInterval[4]*1000;  
+        nextZone2 = singleInterval[5];    
+        nextZoneLength2 = singleInterval[6]*1000;  
+        nextZone3 = singleInterval[7];    
+        nextZoneLength3 = singleInterval[8]*1000;  
+        updateStatic(iLength, currentZone, nextZone, nextZoneLength, nextZone2, nextZoneLength2, nextZone3, nextZoneLength3);
+      }
+
+      var minO =  Math.floor(classLengthLeft / minute);
+      var secO =  Math.floor((classLengthLeft % (minute)) / second);
+      if (minO.toString().length == 1) {
+        minO = "0" + minO;
+      }
+      if (secO.toString().length == 1) {
+        secO = "0" + secO;
+      }
+
+      var timeLeft = systemTimeToEnd - currentTimestamp - (classLength-iLength) + sumTimeElapsed;
+    //  console.log("Time left is " + timeLeft +   " " + (systemTimeToEnd - currentTimestamp ) + " " + classLength + " " + iLength +  " " + sumTimeElapsed);
+     // console.log("Time left is " + timeLeft + " and " +   systemTimeToEnd + " " + currentTimestamp + " " + classLength + " " + iLength + " " + sumTimeElapsed);
+      if (timeLeft > 0) {
+        var min =  Math.floor(timeLeft / minute);
+        var sec =  Math.floor((timeLeft % (minute)) / second);
+        if (min.toString().length == 1) {
+          min = "0" + min;
+        }
+        if (sec.toString().length == 1) {
+          sec = "0" + sec;
+        }
+        if (timeLeft <= 6100) {
+          document.getElementById('timeCurrent').classList.add("blinking");
+        }
+        if (timeLeft <= 3400 && !audioSet && enableBeeps) {
+          audioSet = true;
+          beep(100, 520, 400);
+          setTimeout(() => {  beep(100, 520, 400); }, 800);
+          setTimeout(() => {  beep(100, 520, 400);}, 1700);
+        }
+        document.getElementById('timeCurrent').innerText = min + ":" + sec;
+      }
+      document.getElementById('timeOverall').innerText = minO + ":" + secO;
+
+      first = false;
+
+
+    }, 100);
+  }
+
+  if(isFacebookApp()){
+       // your action here if user using Facebook in-app browser
+      alert('Are you using Facebook Browser? If you close the tab in Facebook, you\'ll lose progress in your current class.  Best practice: press [...] and Open the tool directly in Chrome or Safari. Thank you!');
+  }
+
+
+
+  </script>
+  <!-- Facebook Pixel Code -->
+<script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '220423905851222');
+  fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=220423905851222&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Facebook Pixel Code -->
+<style type='text/css'>
+  canvas{
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+  }
+
+  .backButton {
+    display: inline-block;
+    float: left;
+    padding-top: 20px;
+    padding-left: 20px;
+  }
+  .backButton img {
+    max-height: 50px;
+  }
+
+
+  .nextBlocKPadding {
+    border-right: 1px solid gray;
+  }
+  .nextBlockText {
+    font-size: 10vw;
+    vertical-align: top;
+    padding-right: 10px;
+    margin-right: 20px;
+  }
+
+  @media screen and (min-width: 1001px) {
+    .nextBlockText {
+      font-size: 4em;
+    }
+  }
+
+  @media screen and (max-width: 550px) {
+    .smallFontCurrentZone {
+      font-size: 2.5em;
+    }
+  }
+  @media screen and (min-width:551px) and (max-width: 700px) {
+    .smallFontCurrentZone {
+      font-size: 3.0em;
+    }
+  }
+  @media screen and (min-width:701px) and (max-width: 1000px) {
+    .smallFontCurrentZone {
+      font-size: 4.0em;
+    }
+  }
+  @media screen and (min-width: 1001px) {
+    .smallFontCurrentZone {
+      font-size: 6.0em;
+    }
+  }
+  .bigFontCurrentZone {
+    font-size: 8.5em;
+  }
+  #currentZoneNum {
+    border-left: 1px solid gray;
+    padding-left: 10px;
+    margin-left: 20px;
+  }
+
+  .disableZoom {
+    touch-action: manipulation;
+  }
+
+  .darkMode {
+    background-color: black;
+    color: #e7e7e7;
+    --c: #e7e7e7;
+  }
+
+  @media screen and (min-width: 1001px) {
+  .darkMode .classTitle {
+    color: #e7e7e7;
+  }
+  }
+
+
+  .zwiftInfo {
+      text-align: left;
+      font-weight: normal;
+      font-size: 2.7vw;
+      padding-top: 5px;
+      padding-bottom: 5px;
+  }
+
+  @media screen and (min-width: 1001px) {
+    .zwiftInfo {
+        font-size: 1.1em;
+    }
+  }
+
+   .pelotonInfo {
+      text-align: left;
+      font-weight: normal;
+      font-size: 3.0vw;
+      padding-top: 5px;
+      padding-bottom: 5px;
+  }
+
+  @media screen and (min-width: 1001px) {
+    .pelotonInfo {
+        font-size: 1.3em;
+    }
+  }
+</style>
+<script type='text/javascript'>
+  function goBack() {
+     if (typeof(Storage) !== "undefined" && localStorage.getItem("1595") && (localStorage.getItem("1595") > Date.now())) {
+        var r = confirm("Are you sure you want to go back to the previous page? You might have a class in progress.  This will go back to the library, not the preview/stats page.");
+        if (r == true) {
+          if (location.href.indexOf("#") != -1) {
+            window.history.go(-2);
+          } else {
+            window.history.back();
+          }
+        }
+     } else {
+        window.history.back();
+     }
+  }
+</script>
+</HEAD>
+<BODY>
+  <header class="cd-header">
+    <span class="backButton"><img src='/img/icons8-go-back-100.png' onClick="goBack();"></span>
+    <h1 class="mainHeader" id="headerText">Power Zone Timing Tool for Peloton</h1>
+    <a href="https://app.homefitnessbuddy.com/peloton/powerzone/"><img src='/img/HeaderLogo.png' style="max-height:60px;"></a>
+  </header>
+  <div class="bodyContainer">
+<div class="hfbContainer">
+
+
+  <h1 class="classTitle">60 Minute Pro Cyclist</h1>
+  <h1 class="tssInfo">Race Simulation</h1>  <h1 class="instructorTitle">Christian Vande Velde</h1>
+  <h1 class="classDate">03/25/26 @ 12:00AM ET</h1>
+  <h1 class="tssInfo">Estimated TSS® (Training Stress Score): 63</h1>
+  <h1 class="zwiftInfo"><a href="/peloton/powerzone/zwift_export.php?class_id=1595">Export to Zwift (.zwo file)</a></h1>
+  <h1 class="pelotonInfo"><a href="https://members.onepeloton.com/classes/cycling?modal=classDetailsModal&classId=8a5d45af13c7404aaa675e8713c268be" target="_blank">Open/View on Peloton</a></h1> 
+  <div id="classCompletedBlock" style="display:none;">
+    <h2>Great job!  Another workout completed.</h2>
+    Looking for your next class?   <a href="/peloton/powerzone/">Click here</a> to browse or search the <a href="/peloton/powerzone/">library of power zone classes</a>.
+    <BR/><BR/><BR/>Have feedback about the timing tool for this class?  Were intervals off by more than a few seconds?  Click the feedback icon below to let us know!  You'll be helping the rest of the Peloton community who rides this in the future.  You can also just email us at <a href="mailto:mail@homefitnessbuddy.com">mail@homefitnessbuddy.com</a>.<BR/> 
+    <div class="postRideFeedbackText">
+      <div id="feedback">
+        <a href="#" data-toggle="modal" data-target="#feedback-modal">
+          <img src='/img/Feedback-Transparent.png'>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div id="preClassBlock">
+    <span class="startTimerText">
+      Click below when the 1:00 pre-class timer reaches zero so the timer syncs with the class!
+    </span>
+    <div class="startButtonBlock">
+      <script type='text/javascript'>
+        if (typeof(Storage) !== "undefined" && localStorage.getItem("1595") && (localStorage.getItem("1595") > Date.now())) {
+          document.write("<div style=\"margin-left:10vw;margin-right:30vw;\"><font color='red'>It looks like you might have refreshed your browser.  If you are still working out, click \"Resume Workout\" to pick back up where you left off.  If you are starting from the beginning, select \"Start New Workout\"</font></div><BR/>");
+          document.write('<a href="#" class="buttonStart" onClick="classStart(0);">Resume Workout</a>');
+          document.write('&nbsp;&nbsp;&nbsp;&nbsp;<a href="#" style=\"margin-top:20px;\" class="buttonStart" onClick="clearAndStart();">Start New Workout</a>');
+        } else {
+          document.write('<a href="#" class="buttonStart" onClick="classStart(1);">Start Workout</a>');
+
+        }
+      </script>
+    </div>
+   <!-- <BR/><strong><font color='red'>Help us help you!</font></strong>.  We now have the ability to show the warmup structure, both in the preview graph and the timer. But <strong><u><a href="/peloton/powerzone/warmup.php">we need your help</a></u></strong>.   <a href="/peloton/powerzone/warmup.php">Click here</a> if you have a few minutes to spare to help gather data. It's easy!<BR/><Br/>-->
+    <h2 class="classSummaryText">Workout Summary</h2>
+    <div class="subtleDivider"></div>
+          <h3 class="dataSectionHeader">Graph Preview</h3>
+      <div style="display:block;">
+        <div style="position:relative; height:400px;max-width:95vw;">
+          <canvas id="graphPreview"></canvas>
+        </div>
+        <div id="rotateTip">
+        <BR/><i>Tip: On a phone? Rotate your device sideways to landscape mode for a better display of this graph. Just rotate back before starting the timer!</i>
+         </div>
+      </div>
+      <div class="subtleDivider"></div>
+        <h3 class="dataSectionHeader">Time In Zones</h3>
+    <span class="">Excluding warm up and cool down</span>
+    <table class="timeInZoneTable">
+      <TR>
+          <TH>Z1</TH>
+          <TH>Z2</TH>
+          <TH>Z3</TH>
+          <TH>SS</TH>
+          <TH>Z4</TH>
+          <TH>Z5</TH>
+          <TH>Z6</TH>
+          <TH>Z7</TH>
+      </TR>
+      <TR>
+        <TD>6:30</TD>
+        <TD>6:00</TD>
+        <TD>11:30</TD>
+        <TD></TD>
+        <TD>8:00</TD>
+        <TD>2:30</TD>
+        <TD>0:30</TD>
+        <TD></TD>
+      </TR>
+    </table>
+    <div class="subtleDivider"></div>
+    <h3 class="dataSectionHeader">Class Structure</h3>
+    <TABLE width='100%' class="classStructTable">
+
+       <TR><td colspan='2' class='workBlockHeaderTD'><h3 class='workBlockHeader'>Warm Up</h3><span class='headerTimeBlock'>  (15:00)</span></TD</TR><TR><TD class="tdIntName">Flat Road</td><td class='tdLength'>3:00</td></tr><TR><TD class="tdIntName">Several Spinnups</td><td class='tdLength'>1:30</td></tr><TR><TD class="tdIntName">Z2 to Z4 build</td><td class='tdLength'>6:00</td></tr><TR><td colspan='2' class='workBlockHeaderTD'><h3 class='workBlockHeader'>Main Set</h3></td></tr><TR><TD class="tdIntName">Zone 5</td><td class='tdLength'>0:30</td></tr><TR><TD class="tdIntName">Zone 1</td><td class='tdLength'>0:30</td></tr><TR><TD class="tdIntName">Zone 5</td><td class='tdLength'>0:30</td></tr><TR><TD class="tdIntName">Zone 1</td><td class='tdLength'>0:30</td></tr><TR><TD class="tdIntName">Zone 5</td><td class='tdLength'>0:30</td></tr><TR><TD class="tdIntName">Zone 1</td><td class='tdLength'>0:30</td></tr><TR><TD class="tdIntName">Zone 3</td><td class='tdLength'>2:00</td></tr><TR><TD class="tdIntName">Zone 2</td><td class='tdLength'>2:00</td></tr><TR><TD class="tdIntName">Zone 3</td><td class='tdLength'>2:00</td></tr><TR><TD class="tdIntName">Zone 2</td><td class='tdLength'>2:00</td></tr><TR><TD class="tdIntName">Zone 4</td><td class='tdLength'>3:30</td></tr><TR><TD class="tdIntName">Zone 1</td><td class='tdLength'>3:30</td></tr><TR><TD class="tdIntName">Zone 3</td><td class='tdLength'>2:00</td></tr><TR><TD class="tdIntName">Zone 2</td><td class='tdLength'>1:00</td></tr><TR><TD class="tdIntName">Zone 3</td><td class='tdLength'>2:00</td></tr><TR><TD class="tdIntName">Zone 2</td><td class='tdLength'>1:00</td></tr><TR><TD class="tdIntName">Zone 3</td><td class='tdLength'>2:00</td></tr><TR><TD class="tdIntName">Zone 1</td><td class='tdLength'>0:30</td></tr><TR><TD class="tdIntName">Zone 4</td><td class='tdLength'>4:30</td></tr><TR><TD class="tdIntName">Zone 5</td><td class='tdLength'>0:30</td></tr><TR><TD class="tdIntName">Zone 1</td><td class='tdLength'>0:30</td></tr><TR><TD class="tdIntName">Zone 5</td><td class='tdLength'>0:30</td></tr><TR><TD class="tdIntName">Zone 1</td><td class='tdLength'>0:30</td></tr><TR><TD class="tdIntName">Zone 3</td><td class='tdLength'>1:30</td></tr><TR><TD class="tdIntName">Zone 6</td><td class='tdLength'>0:30</td></tr><TR><td colspan='2' class='workBlockHeaderTD'><h3 class='workBlockHeader'>Cool Down </h3><span class='headerTimeBlock'>  (10:00)</span></td></tr>    </TABLE>
+    
+    <BR/><BR/><HR style="border-top:1px solid black !important;"/>
+<!-- HFBFooter -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-9914893628950868"
+     data-ad-slot="9884128997"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+    <Br/><BR/>
+Have feedback about the timing tool for this class?  Were intervals off by more than a few seconds?  Click the feedback icon below to let us know!  You'll be helping the rest of the Peloton community who rides this in the future.  You can also just email us at <a href="mailto:mail@homefitnessbuddy.com">mail@homefitnessbuddy.com</a>.<BR/>
+    <div class="postRideFeedbackText">
+      <div id="feedback">
+        <a href="#" data-toggle="modal" data-target="#feedback-modal">
+          <img src='/img/Feedback-Transparent.png'>
+        </a>
+      </div>
+    </div>
+    <BR/>First time here?  You can see a listing and search for different power zone classes using the <a href="/peloton/powerzone/">library of power zone classes here</a>.
+  </div>
+
+  <div id="countdownBlock">
+    <h3 class="intervalTimerHeader">Now (<span id="currentZoneTime">2:30</span> total)</h1>
+    <span id="timeCurrent"></span><span id="currentZoneNum">Z4</span>
+    <h3 class="nextIntervalheader">Upcoming<BR/></h3>
+      <span id="nextZoneTime"  class="nextBlockText nextBlocKPadding">3:00</span><span id="nextZoneNum" class="nextBlockText"></span><BR/>
+      <span id="nextZone2Block"><span id="nextZoneTime2"  class="nextBlockText nextBlocKPadding">3:00</span><span id="nextZoneNum2" class="nextBlockText">Z1</span><BR/></span>
+      <span id="nextZone3Block"><span id="nextZoneTime3"  class="nextBlockText nextBlocKPadding">3:00</span><span id="nextZoneNum3" class="nextBlockText">Z1</span><BR/></span>
+    <h3 class="overallTimerHeader">Class Time Remaining</h4>
+    <span id="timeOverall"></span>
+    <div style="display:block;" class="disableZoom">
+        <BR/><BR/><span style="font-size:2em !important"><input type="checkbox" id="useAudio" name="useAudio" value="1">Enable audio beep last 3 seconds of each interval</span><BR/>
+        <BR/><BR/><span style="font-size:2em !important"><input type="checkbox" id="darkMode" name="darkMode" value="1">Enable Timer Dark Mode</span><BR/>
+         <h3 class="overallTimerHeader">Timer Issue?</h3>
+         Did you forget to start the clock until a few seconds in?   Start it a bit early?  Use the icons below to jump the timer forward and back a second to get it more synced up!  This will adjust both the overall timer, and current interval. <BR/><BR/>
+         <div style="max-width:45%;text-align:left;display:inline;float:left;">
+           <div style="display:flex;align-items:center;">
+             <img src="/img/Skip1.png" id="ffremove1con" style="float:left;vertical-align:middle;"><span>Remove 1 second from timer</span>
+           </div>
+        </div>
+        <div style="max-width:45%;text-align:left;display:inline;float:left;margin-left:10%;">
+           <div style="display:flex;align-items:center;">
+              <img src="/img/SkipBack.png" id="ffadd1con"  style="float:left;vertical-align:middle;"><span>Add 1 second to timer</span>
+           </div>
+        </div>
+        <div style="max-width: 100%; clear:both; float: left;">&nbsp;</div>
+        <div style="max-width:45%;text-align:left;display:inline;float:left;">
+           <div style="display:flex;align-items:center;">
+             <img src="/img/Skip10.png" id="ffremove10con" style="float:left;vertical-align:middle;"><span>Remove 10 seconds from timer</span>
+           </div>
+        </div>
+        <div style="max-width:45%;text-align:left;display:inline;float:left;margin-left:10%;">
+           <div style="display:flex;align-items:center;">
+              <img src="/img/SkipBack10.png" id="ffadd10con"  style="float:left;vertical-align:middle;"><span>Add 10 seconds to timer</span>
+           </div>
+        </div>
+                <div style="max-width: 100%; clear:both; float: left;">&nbsp;</div>
+
+    </div>
+    <BR/><BR/>
+    <div style="padding-top:30px;float:left;">
+      <HR style="border-top:1px solid black !important;"/>
+    Have feedback about the timing tool for this class?  Were intervals off by more than a few seconds?  Click the feedback icon below to let us know!  You'll be helping the rest of the Peloton community who rides this in the future.  You can also just email us at <a href="mailto:mail@homefitnessbuddy.com">mail@homefitnessbuddy.com</a>.<BR/>
+        <div class="postRideFeedbackText">
+          <div id="feedback">
+            <a href="#" data-toggle="modal" data-target="#feedback-modal">
+              <img src='/img/Feedback-Transparent.png'>
+            </a>
+          </div>
+        </div>
+      </div>
+  </div>
+  <div class="footerText">
+Thanks to Redditors u/eddywouldgo and u/C0ley67 for some of the <a href="https://www.reddit.com/r/pelotoncycle/comments/funqkv/interval_breakdown_for_all_pz_classes_through_the/" target="_blank">initial data</a>.  Additional data manually gathered or provided by the broader Peloton Community.
+</div>
+</div>
+</div>
+
+
+ <div class="modal fade feedback-modal" id="feedback-modal" tabindex="-1" role="dialog" aria-labelledby="feedback-modal"
+     aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <form action="/peloton/powerzone/sendfeedback.php" id="feedback-form" method="post" autocomplete="off">
+
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                    aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">Share your feedback</h4>
+          <small>Thoughts on how to improve the tool or website?  Issues with this specific workout?  Please let us know!</small>
+        </div>
+
+        <div class="modal-body">
+          <input type="hidden" class="form-control" name="feedback_url" id="feedback-url" value=""/>
+            <div class="form-group">
+              <input type="email" class="form-control" name="feedback_email" id="feedback-email" value=""
+                     placeholder="Your email"/>
+              <span class="help-block">If you want a response, leave your email.  100% optional!</span>
+            </div>
+          <div class="form-group">
+          <!--  <input type="text" class="form-control" name="feedback_subject" id="feedback-subject" value=""
+                   autocomplete="off"
+                   placeholder="Subject"/>-->
+           <!-- <span class="help-block">Enter a short description of your problem or idea.</span>-->
+          </div>
+
+          <div class="form-group">
+          <textarea name="feedback_message" id="feedback-message" cols="10" rows="5"
+                    placeholder="Leave any notes or feedback.  For example: All intervals were about 12 seconds off, or the third interval ended 20 seconds early.  Or anything else on your mind or ways to improve the site in general!" required="required" class="form-control"></textarea>
+          </div>
+          <input type="hidden" name="class_id" value="1595"/>
+
+          <script type="text/javascript">/* <![CDATA[ */
+            document.write('<input type="hidden" name="feedback_captcha" id="feedback-captcha" value="P' + 'r' + 'a' + 'g' + 'u' + 'e" />');
+            /* ]]> */
+          </script>
+
+          <noscript>
+            <label for="feedback-captcha" class="label-control">Are you human? Write "<em>Prague</em>"</label>
+            <input type="text" name="feedback_captcha" id="feedback-captcha" value="" class="form-control"
+                   autocomplete="off"/>
+          </noscript>
+
+          <div id="feedback-alerts" class="feedback-alerts"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="reset" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Send feedback!</button>
+        </div>
+      </form>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<script type='text/javascript'>
+  (function ($) {
+  $(document).ready(function ($) {
+        $('#feedback-modal').on('shown.bs.modal', function () {
+            document.getElementById('feedback-url').value = window.location.protocol + '//' + window.location.hostname + window.location.pathname + window.location.hash;
+        
+            $('#feedback-alerts').empty();
+            var $form = $('#feedback-form');
+            $form.removeClass('loading');
+            $('input:visible:first', $form).focus();
+        });
+        
+        $('#feedback-form').on('submit', function(e) {
+                var $form = $('#feedback-form');
+                    var $modal = $('#feedback-modal');
+                    var $alerts = $('#feedback-alerts');
+        
+                    $form.addClass('loading');
+                    $alerts.empty();
+                    $.post(
+                            $form.attr('action'),
+                            $form.serialize(),
+                            function (response) {
+                                if (response) {
+                                    $alerts.append('<p class="alert alert-success">' + response + '</p>');
+        
+                                    setTimeout(function () {
+                                        $modal.modal('hide');
+                                        $alerts.empty();
+                                        $form.trigger('reset');
+                                    }, 2500);
+        
+                                } else {
+                                    $alerts.append('<p class="alert alert-danger">There was some sort of error submitting your feedback.  Please try again later.</p>');
+                                }
+                                $form.removeClass('loading');
+                            }, 'html'
+                    );
+        
+                    e.preventDefault(); // not submit form
+        });
+        });
+})(jQuery);
+</script>
+
+
+
+<script>
+
+
+
+
+
+
+  var dataWarmup = [];
+  var dataFull = [];
+  var lengthIndexes = [];
+  var dataPoints = [];
+dataWarmup.push({x: 0,y: 45},{x: 180,y: 45});dataPoints.push({x: 90,y: 45});dataFull.push({x: 180,y: 45});lengthIndexes[0] = 180;dataFull.push({x: 210,y: 45,},);lengthIndexes[1] = 30;dataFull.push({x: 210,y: 45},{x: 240,y: 45});dataPoints.push({x: 225,y: 45});lengthIndexes[2] = 30;dataFull.push({x: 270,y: 45,},);lengthIndexes[3] = 30;dataFull.push({x: 270,y: 45},{x: 300,y: 45});dataPoints.push({x: 285,y: 45});lengthIndexes[4] = 30;dataFull.push({x: 330,y: 45,},);lengthIndexes[5] = 30;dataFull.push({x: 330,y: 45},{x: 360,y: 45});dataPoints.push({x: 345,y: 45});lengthIndexes[6] = 30;dataFull.push({x: 360,y: 65},{x: 480,y: 65});dataPoints.push({x: 420,y: 65});lengthIndexes[7] = 120;dataFull.push({x: 480,y: 83},{x: 600,y: 83});dataPoints.push({x: 540,y: 83});lengthIndexes[8] = 120;dataFull.push({x: 600,y: 45},{x: 660,y: 45});dataPoints.push({x: 630,y: 45});lengthIndexes[9] = 60;dataFull.push({x: 660,y: 97},{x: 780,y: 97});dataPoints.push({x: 720,y: 97});lengthIndexes[10] = 120;dataFull.push({x: 780,y: 45},{x: 900,y: 45});dataPoints.push({x: 840,y: 45});lengthIndexes[11] = 120;dataFull.push({x: 900,y: 113},{x: 930,y: 113});dataPoints.push({x: 915,y: 113});lengthIndexes[12] = 30;dataFull.push({x: 930,y: 45},{x: 960,y: 45});dataPoints.push({x: 945,y: 45});lengthIndexes[13] = 30;dataFull.push({x: 960,y: 113},{x: 990,y: 113});dataPoints.push({x: 975,y: 113});lengthIndexes[14] = 30;dataFull.push({x: 990,y: 45},{x: 1020,y: 45});dataPoints.push({x: 1005,y: 45});lengthIndexes[15] = 30;dataFull.push({x: 1020,y: 113},{x: 1050,y: 113});dataPoints.push({x: 1035,y: 113});lengthIndexes[16] = 30;dataFull.push({x: 1050,y: 45},{x: 1080,y: 45});dataPoints.push({x: 1065,y: 45});lengthIndexes[17] = 30;dataFull.push({x: 1080,y: 83},{x: 1200,y: 83});dataPoints.push({x: 1140,y: 83});lengthIndexes[18] = 120;dataFull.push({x: 1200,y: 65},{x: 1320,y: 65});dataPoints.push({x: 1260,y: 65});lengthIndexes[19] = 120;dataFull.push({x: 1320,y: 83},{x: 1440,y: 83});dataPoints.push({x: 1380,y: 83});lengthIndexes[20] = 120;dataFull.push({x: 1440,y: 65},{x: 1560,y: 65});dataPoints.push({x: 1500,y: 65});lengthIndexes[21] = 120;dataFull.push({x: 1560,y: 97},{x: 1770,y: 97});dataPoints.push({x: 1665,y: 97});lengthIndexes[22] = 210;dataFull.push({x: 1770,y: 45},{x: 1980,y: 45});dataPoints.push({x: 1875,y: 45});lengthIndexes[23] = 210;dataFull.push({x: 1980,y: 83},{x: 2100,y: 83});dataPoints.push({x: 2040,y: 83});lengthIndexes[24] = 120;dataFull.push({x: 2100,y: 65},{x: 2160,y: 65});dataPoints.push({x: 2130,y: 65});lengthIndexes[25] = 60;dataFull.push({x: 2160,y: 83},{x: 2280,y: 83});dataPoints.push({x: 2220,y: 83});lengthIndexes[26] = 120;dataFull.push({x: 2280,y: 65},{x: 2340,y: 65});dataPoints.push({x: 2310,y: 65});lengthIndexes[27] = 60;dataFull.push({x: 2340,y: 83},{x: 2460,y: 83});dataPoints.push({x: 2400,y: 83});lengthIndexes[28] = 120;dataFull.push({x: 2460,y: 45},{x: 2490,y: 45});dataPoints.push({x: 2475,y: 45});lengthIndexes[29] = 30;dataFull.push({x: 2490,y: 97},{x: 2760,y: 97});dataPoints.push({x: 2625,y: 97});lengthIndexes[30] = 270;dataFull.push({x: 2760,y: 113},{x: 2790,y: 113});dataPoints.push({x: 2775,y: 113});lengthIndexes[31] = 30;dataFull.push({x: 2790,y: 45},{x: 2820,y: 45});dataPoints.push({x: 2805,y: 45});lengthIndexes[32] = 30;dataFull.push({x: 2820,y: 113},{x: 2850,y: 113});dataPoints.push({x: 2835,y: 113});lengthIndexes[33] = 30;dataFull.push({x: 2850,y: 45},{x: 2880,y: 45});dataPoints.push({x: 2865,y: 45});lengthIndexes[34] = 30;dataFull.push({x: 2880,y: 83},{x: 2970,y: 83});dataPoints.push({x: 2925,y: 83});lengthIndexes[35] = 90;dataFull.push({x: 2970,y: 135},{x: 3000,y: 135});dataPoints.push({x: 2985,y: 135});lengthIndexes[36] = 30;dataFull.push({x: 3000,y: 45},{x: 3600,y: 45});dataPoints.push({x: 3300,y: 45});lengthIndexes[37] = 600;
+  var endWarmup = 900;
+
+  function prettyTime(label) {
+    var gmin =  Math.floor((label/ 60));
+    var gsec =  Math.floor((label % 60));
+    if (gmin.toString().length == 1) {
+      gmin = "0" + gmin;
+    }
+    if (gsec.toString().length == 1) {
+      gsec = "0" + gsec;
+    }
+    return gmin + ":" + gsec;
+  }
+
+function zoneLookup(output) {
+        switch(output) {
+          case '45':
+            return 'Z1';
+          case '51':
+            return 'Warmup';
+          case '57':
+            return 'Warmup';
+          case '63':
+            return 'Warmup';
+          case '58':
+            return 'Low Z2';
+          case '64':
+            return 'Mid Z2';
+          case '65':
+            return 'Z2';
+          case '73':
+            return 'High Z2';
+          case '77':
+            return 'Low Z3';
+          case '82':
+            return 'Mid Z3';
+          case '83':
+            return 'Z3';
+          case '88':
+            return 'High Z3';
+           case '89':
+            return 'Several Spin-Ups';
+          case '90':
+            return 'SS';
+          case '92':
+            return 'Low Z4';
+          case '96':
+            return 'Mid Z4';
+          case '97':
+            return 'Z4';
+          case '103':
+            return 'High Z4';
+          case '107':
+            return 'Low Z5';
+          case '112':
+            return 'Mid Z5';
+          case '113':
+            return 'Z5';
+          case '118':
+            return 'High Z5';
+          case '122':
+            return 'Low Z6';
+          case '134':
+            return 'Mid Z6';
+          case '135':
+            return 'Z6';          
+          case '148':
+            return 'High Z6';
+          case '152':
+            return 'Low Z7';
+          case '159':
+            return 'Mid Z7';
+          case '160':
+            return 'Z7';
+          case '178':
+            return 'High Z7';
+          default:
+            return 'Z7';
+        }
+  }
+  var targetChartConfig = {
+    type: 'line',
+
+    data: {
+      datasets: [{
+          lineTension: 0,
+          pointRadius: 0, 
+        data: dataFull,
+        borderColor: "#3e95cd",
+        fill: false
+      },{
+          lineTension: 0,
+          pointRadius: 0, 
+           borderDash: [5, 5],
+        data: dataWarmup,
+        borderColor: "#3e95cd",
+        fill: false
+      },{
+          lineTension: 0,
+        data: dataPoints,
+                pointHitRadius: 44,
+
+        borderColor: "#3e95cd",
+        fill: false,
+         showLine: false,
+        fill: false
+      },]
+    },
+    options: {
+      title: {
+        display: true,
+        fontStyle: 'bold',
+        fontSize: 20,
+      },
+      maintainAspectRatio: false,
+      tooltips: {
+         callbacks: {
+            title: function(t, d) {
+              console.log(t[0].index);
+              console.log(t[0].value);
+              console.log(t);
+              console.log(d);
+              if (t.length == 1) {
+               return (t[0].index == 0 ? "Flat Road" : zoneLookup(t[0].value)) + " for " + prettyTime(lengthIndexes[t[0].index]) ;
+              } else {
+                return "Flat Road";
+              }
+            },
+            label: function(t, d) {
+              return "";
+            }
+         }
+      },
+      scales: {
+        xAxes: [{
+          id: 'x-axis-1',
+          type: 'linear',
+          ticks:{
+            suggestedMax: classLength/1000,
+            stepSize: (classLength/1000 > 2700 && classLength/1000 != 4500 ? 600 : 300),
+            callback: function(label, index, labels) {
+              return prettyTime(label);
+            }
+          },
+          gridLines: {
+              display: false,
+              drawTicks: false,
+          },
+        }],
+        yAxes: [{
+          id: 'y-axis-1',
+          position: 'left',
+           gridLines: {
+              display: false,
+              drawTicks: false,
+          },
+          afterBuildTicks: function (chartObj) { //Build ticks labelling as per your need
+            chartObj.ticks = [50,60,80,90,95,110,125, 155];
+          },
+          ticks: {
+              mirror: true,
+              z: 100,
+              suggestedMax: 160,
+              fontStyle: 'bold',
+              fontSize: 15,
+              padding: -5,
+              callback: function(label, index, labels) {
+                  if (label == 50) {
+                    return "Z1";
+                  } else if (label == 60) {
+                    return "Z2";
+                  } else if (label <= 80 ) {
+                    return "Z3";
+                  } else if (label <= 90 ) {
+                    return "SS";
+                  } else if (label <= 95) {
+                    return "Z4";
+                  } else if (label <= 110) {
+                    return "Z5";
+                  } else if (label <= 125) {
+                    return "Z6";
+                  } else if (label <= 155) {
+                    return "Z7";
+                  } else {
+                    return "Zone 7";
+                  }
+              }
+          },
+        }]
+      },
+      legend: false,
+       annotation: {
+          drawTime: "beforeDatasetsDraw",
+          annotations: [{
+            id: 'z1box',
+            type: 'box',
+            yScaleID: 'y-axis-1',
+            yMin: 0,
+            yMax: 55,
+            backgroundColor: 'rgba(205, 205, 205, 0.8)',
+            borderColor: 'rgba(205, 205, 205, 0.2)',
+          },{
+            id: 'z2box',
+            type: 'box',
+            yScaleID: 'y-axis-1',
+            yMin: 55,
+            yMax: 75,
+            backgroundColor: 'rgba(137, 182, 97, 0.8)',
+            borderColor: 'rgba(137, 182, 97, 0.2)',
+          },{
+            id: 'z3box',
+            type: 'box',
+            yScaleID: 'y-axis-1',
+            yMin: 75,
+            yMax: 90,
+            backgroundColor: 'rgba(240, 200, 107, 0.8)',
+            borderColor: 'rgba(240, 200, 107, 0.2)',
+          },{
+            id: 'z4box',
+            type: 'box',
+            yScaleID: 'y-axis-1',
+            yMin: 90,
+            yMax: 105,
+            backgroundColor: 'rgba(233, 177, 70, 0.8)',
+            borderColor: 'rgba(233, 177, 70, 0.2)',
+          },{
+            id: 'z5box',
+            type: 'box',
+            yScaleID: 'y-axis-1',
+            yMin: 105,
+            yMax: 120,
+            backgroundColor: 'rgba(225, 132, 98, 0.8)',
+            borderColor: 'rgba(200, 132, 98, 0.2)',
+          },{
+            id: 'z6box',
+            type: 'box',
+            yScaleID: 'y-axis-1',
+            yMin: 120,
+            yMax: 150,
+            backgroundColor: 'rgba(222, 92, 63, 0.8)',
+            borderColor: 'rgba(222, 92, 63, 0.2)',
+          },{
+            id: 'z7box',
+            type: 'box',
+            yScaleID: 'y-axis-1',
+            yMin: 150,
+            yMax: 180,
+            backgroundColor: 'rgba(231, 51, 35, 0.8)',
+            borderColor: 'rgba(231, 51, 35, 0.2)',
+          },{
+            id: 'wuBox',
+            type: 'box',
+            xScaleID: 'x-axis-1',
+            xMin: 0,
+            xMax: endWarmup,
+            backgroundColor: 'rgba(200, 200, 200, 0.2)',
+            borderColor: 'rgba(200, 200, 200, 0.2)',
+          },]
+        },
+        watermark: {
+            image: '/img/HFBLogo512.png',
+
+            x: 50,
+            y: 50,
+
+            width: 100,
+            height: 100,
+
+            opacity: 0.8,
+
+            alignX: "top",
+            alignY: "left",
+
+            position: "front",
+        },
+    }
+  };
+    targetChartConfig.options.title.text =  'Target Zones for 60 Minute Pro Cyclist Race Simulation with Christian Vande Velde on 03/25/26 @ 12:00AM ET';
+    window.onload = function() {
+      var ctx = document.getElementById('graphPreview').getContext('2d');
+      window.myLine = new Chart(ctx, targetChartConfig);
+    };
+  </script>
+<div class="footer">
+   Peloton is a registered trademark of Peloton Interactive, Inc.  This site is not affiliated with Peloton Cycle, or Peloton Interactive in any way.   Our <a style="color:white; text-decoration:underline;" href="https://www.homefitnessbuddy.com/privacy-policy/" target="_blank">Privacy Policy</a> and our <a style="color:white; text-decoration:underline;" href="https://www.homefitnessbuddy.com/terms-conditions/" target="_blank">Terms & Conditions</a> can be found at those links.  TSS®, Training Stress Score® are trademarks of TrainingPeaks, LLC and are used with permission. Learn more at <a style="color:white; text-decoration:underline;" href="http://www.trainingpeaks.com" target="_blank">http://www.trainingpeaks.com</a>
+</div>
+</BODY>
+</HTML>
