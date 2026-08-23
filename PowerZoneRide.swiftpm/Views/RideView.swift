@@ -8,13 +8,16 @@ import SwiftUI
 struct RideView: View {
     @StateObject private var engine: RideEngine
     @ObservedObject var meter: PowerMeterService
+    @ObservedObject var music: AppleMusicService
     @Environment(\.dismiss) private var dismiss
 
     @AppStorage("ftp") private var ftp: Double = 200
+    @AppStorage("musicAutoStart") private var musicAutoStart = true
     @State private var showingSummary = false
 
-    init(workout: Workout, meter: PowerMeterService, ftp: Double) {
+    init(workout: Workout, meter: PowerMeterService, music: AppleMusicService, ftp: Double) {
         self.meter = meter
+        self.music = music
         _engine = StateObject(wrappedValue: RideEngine(workout: workout, meter: meter, ftp: ftp))
     }
 
@@ -31,6 +34,7 @@ struct RideView: View {
                     .frame(maxHeight: .infinity)
                 readout
                 intervalStrip
+                if showMusicBar { musicBar }
                 controls
             }
             .padding(14)
@@ -165,12 +169,54 @@ struct RideView: View {
         )
     }
 
+    // MARK: - Music
+
+    /// Only worth the row when there is something to control: a track playing, or a
+    /// playlist chosen in Settings that a tap can start.
+    private var showMusicBar: Bool {
+        music.state == .connected && (music.nowPlaying != nil || music.selectedPlaylist != nil)
+    }
+
+    private var musicBar: some View {
+        HStack(spacing: 14) {
+            Image(systemName: "music.note")
+                .font(.caption)
+                .foregroundStyle(.white.opacity(0.45))
+
+            Text(music.nowPlaying.map { np in
+                np.artist.isEmpty ? np.title : "\(np.title) — \(np.artist)"
+            } ?? music.selectedPlaylist?.name ?? "")
+                .font(.subheadline)
+                .foregroundStyle(.white.opacity(0.75))
+                .lineLimit(1)
+
+            Spacer(minLength: 0)
+
+            // Big enough to hit with a sweaty thumb without looking down.
+            Button { music.skipToPrevious() } label: { Image(systemName: "backward.fill") }
+            Button { music.togglePlayPause() } label: {
+                Image(systemName: music.isPlaying ? "pause.fill" : "play.fill").frame(width: 20)
+            }
+            Button { music.skipToNext() } label: { Image(systemName: "forward.fill") }
+        }
+        .font(.title3)
+        .buttonStyle(.plain)
+        .foregroundStyle(.white)
+        .padding(.horizontal, 12).padding(.vertical, 6)
+        .background(Color.white.opacity(0.05), in: RoundedRectangle(cornerRadius: 10))
+    }
+
     // MARK: - Controls
 
     private var controls: some View {
         HStack(spacing: 10) {
             Button {
-                engine.phase == .running ? engine.pause() : engine.start()
+                if engine.phase == .running {
+                    engine.pause()
+                } else {
+                    engine.start()
+                    if musicAutoStart { music.startSelectedPlaylistIfIdle() }
+                }
             } label: {
                 Label(engine.phase == .running ? "Pause" : "Start",
                       systemImage: engine.phase == .running ? "pause.fill" : "play.fill")

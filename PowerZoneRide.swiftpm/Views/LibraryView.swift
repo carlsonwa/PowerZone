@@ -7,6 +7,7 @@ import SwiftUI
 struct LibraryView: View {
     @ObservedObject var client: HFBClient
     @ObservedObject var meter: PowerMeterService
+    @ObservedObject var music: AppleMusicService
 
     @State private var search = ""
     @State private var instructor: String?
@@ -37,7 +38,7 @@ struct LibraryView: View {
         .refreshable { await client.loadCatalog(forceRefresh: true) }
         .task { await client.loadCatalog() }
         .navigationDestination(for: CatalogEntry.self) { entry in
-            WorkoutDetailView(entry: entry, client: client, meter: meter)
+            WorkoutDetailView(entry: entry, client: client, meter: meter, music: music)
         }
     }
 

@@ -5,6 +5,7 @@ struct WorkoutDetailView: View {
     let entry: CatalogEntry
     @ObservedObject var client: HFBClient
     @ObservedObject var meter: PowerMeterService
+    @ObservedObject var music: AppleMusicService
 
     @AppStorage("ftp") private var ftp: Double = 200
     @State private var workout: Workout?
@@ -68,7 +69,7 @@ struct WorkoutDetailView: View {
             }
 
             NavigationLink {
-                RideView(workout: workout, meter: meter, ftp: ftp)
+                RideView(workout: workout, meter: meter, music: music, ftp: ftp)
             } label: {
                 Label(meter.isReceivingData ? "Start Ride" : "Start Ride (no meter connected)",
                       systemImage: "figure.outdoor.cycle")

@@ -1,8 +1,9 @@
 import SwiftUI
 
-/// FTP, the meter connection, and the on-device parser check.
+/// FTP, the meter and Apple Music connections, and the on-device parser check.
 struct SettingsView: View {
     @ObservedObject var meter: PowerMeterService
+    @ObservedObject var music: AppleMusicService
     @AppStorage("ftp") private var ftp: Double = 200
 
     var body: some View {
@@ -47,6 +48,21 @@ struct SettingsView: View {
                         Text(meter.connectedName ?? "Connect")
                         Spacer()
                         Text(meter.state.label).foregroundStyle(.secondary)
+                    }
+                }
+            }
+
+            Section("Apple Music") {
+                NavigationLink {
+                    MusicConnectionView(music: music)
+                } label: {
+                    HStack {
+                        Text(music.selectedPlaylist?.name ?? "Connect")
+                        Spacer()
+                        Text(music.state == .connected && music.selectedPlaylist != nil
+                             ? (music.isPlaying ? "Playing" : "Ready")
+                             : music.state.label)
+                            .foregroundStyle(.secondary)
                     }
                 }
             }

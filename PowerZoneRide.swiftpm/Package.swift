@@ -1,8 +1,8 @@
 // swift-tools-version: 5.9
 
 // Swift Playgrounds app project. Open PowerZoneRide.swiftpm on the iPad in Swift
-// Playgrounds; there is no Xcode step. Bluetooth is declared here rather than through
-// the App Settings UI so the capability survives a fresh clone.
+// Playgrounds; there is no Xcode step. Bluetooth and Apple Music are declared here rather
+// than through the App Settings UI so the capabilities survive a fresh clone.
 
 import AppleProductTypes
 import PackageDescription
@@ -31,7 +31,12 @@ let package = Package(
             ],
             capabilities: [
                 .bluetoothAlways(purposeString:
-                    "PowerZone Ride connects to your bike's power meter to chart your live power output against the workout's target zones.")
+                    "PowerZone Ride connects to your bike's power meter to chart your live power output against the workout's target zones."),
+                // NSAppleMusicUsageDescription. Without this the app is terminated the
+                // moment it touches the media library, so it is not optional for the
+                // Apple Music connection — see Music/AppleMusicService.swift.
+                .mediaLibrary(purposeString:
+                    "PowerZone Ride plays a playlist from your Apple Music library while you ride, and shows what's playing beside your power.")
             ]
         )
     ],

@@ -18,6 +18,7 @@ site directly, and nothing leaves the device except the rides you choose to expo
 - Live power zone graph: target profile as coloured blocks, your output drawn over it
 - The same readouts as the website: current zone, time left in it, the next three blocks,
   total remaining, and ±1s/±10s sync nudges to line up with the class
+- Connect Apple Music and start a playlist with the ride, with track controls on the ride screen
 - Post-ride summary with normalized power, intensity factor, TSS and time in zones
 - Export to TCX (Strava, TrainingPeaks, Garmin Connect) or Apple Health
 
@@ -26,12 +27,15 @@ site directly, and nothing leaves the device except the rides you choose to expo
 1. Install **Swift Playgrounds** from the App Store. Requires iPadOS 17 or later.
 2. Get `PowerZoneRide.swiftpm` onto the iPad — clone with [Working Copy](https://workingcopy.app),
    or download this repo as a zip in Safari and open the `.swiftpm` from Files.
-3. Open it in Swift Playgrounds. Check **App Settings → Capabilities** lists Bluetooth.
+3. Open it in Swift Playgrounds. Check **App Settings → Capabilities** lists Bluetooth and
+   Apple Music.
 4. Press Run. Grant the Bluetooth prompt.
 5. **Settings → Power Meter → Scan.** Spin the cranks first — pedal meters sleep when
    still and won't advertise until they're moving.
 6. **Settings → FTP.** Every target is a percentage of this number, so it has to be right.
-7. Use the ⋯ menu to build it to the Home Screen as a real app. Keep the Playgrounds
+7. Optional: **Settings → Apple Music → Connect**, then tap a playlist to make it the one
+   your rides start with.
+8. Use the ⋯ menu to build it to the Home Screen as a real app. Keep the Playgrounds
    project on the iPad so you can rebuild if it ever stops launching.
 
 ## Using it
@@ -44,6 +48,27 @@ the website's tool works.
 The graph shows the whole class at once rather than scrolling. On a bike you want to see
 that an 8-minute Zone 4 block is coming more than you want resolution on the last thirty
 seconds.
+
+## Music
+
+**Settings → Apple Music** connects to your library, lists your playlists, and remembers the
+one you pick. Tapping **Start** on the ride screen starts it — unless something is already
+playing, which is left alone — and a slim bar under the interval strip shows the track with
+back / play / skip buttons big enough to hit without looking down.
+
+This goes through the Media Player framework and the Music app's own player rather than
+MusicKit, and both halves of that are forced by what a Swift Playgrounds app can declare:
+
+- MusicKit's catalog requests need a developer token issued against a MusicKit-enabled App
+  ID, which needs a team identifier this project doesn't have. `MPMediaLibrary` needs only
+  the `.mediaLibrary` usage string in `Package.swift`.
+- A private in-app queue would need the `audio` background mode to survive the screen
+  locking, and the manifest has no way to declare background modes. Handing the queue to
+  the Music app means playback runs on its audio session and keeps going regardless.
+
+The cost of that is a shared queue: starting a playlist here replaces whatever Music was
+playing, exactly as pressing play in Music would, and it plays your **library** — playlists
+you've added to it, not the Apple Music catalog at large.
 
 ## Two things worth knowing
 
