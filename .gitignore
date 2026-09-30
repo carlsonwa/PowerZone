@@ -6,3 +6,6 @@ __pycache__/
 .build/
 .swiftpm/xcuserdata/
 *.xcuserstate
+
+# MTBcharted downloaded data and generated maps
+mtbcharted/data/

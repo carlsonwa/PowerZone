@@ -1,0 +1,5 @@
+shapely>=2.0
+pyproj>=3.4
+numpy>=1.24
+scikit-image>=0.21
+scipy>=1.10
