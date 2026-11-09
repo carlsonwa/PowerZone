@@ -1,3 +1,7 @@
+> This repository holds two Swift Playgrounds apps:
+> **PowerZone Ride** (this page) and **[Kinboard](KINBOARD.md)**, a family organizer
+> covering the calendar, to-dos, kids' trackers, spending, and messages from school.
+
 # PowerZone Ride
 
 An iPadOS app that charts your live power output against Peloton Power Zone workouts from

@@ -7,7 +7,7 @@ calendar.timeZone = TimeZone(identifier: "America/New_York")!
 let reference = calendar.date(from: DateComponents(year: 2026, month: 11, day: 9, hour: 8))!
 let detector = StubDateDetector(calendar: calendar, reference: reference)
 
-let results = SelfChecks.run(detector: detector)
+let results = SelfChecks.run(detector: detector, detectorCalendar: calendar)
 for r in results {
     print("\(r.passed ? "PASS" : "FAIL")  \(r.name)\(r.detail.isEmpty ? "" : "\n        \(r.detail)")")
 }

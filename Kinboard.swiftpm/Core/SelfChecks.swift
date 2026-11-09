@@ -11,7 +11,10 @@ enum SelfChecks {
         let detail: String
     }
 
-    static func run(detector: DateDetecting) -> [Result] {
+    /// `detectorCalendar` is the calendar the detector reads dates in — the device's own
+    /// for `NSDataDetector`. Repeat checks use a fixed New York calendar instead, so the
+    /// daylight-saving case is always exercised.
+    static func run(detector: DateDetecting, detectorCalendar: Calendar = .current) -> [Result] {
         var results: [Result] = []
         func check(_ name: String, _ condition: Bool, _ detail: @autoclosure () -> String = "") {
             results.append(Result(name: name, passed: condition, detail: condition ? "" : detail()))
@@ -119,41 +122,48 @@ enum SelfChecks {
 
         // MARK: Messages
 
-        let extractor = MessageExtractor(detector: detector, calendar: cal, now: date(2026, 11, 9, 8),
+        let dcal = detectorCalendar
+        func dkey(_ d: Date?) -> String { d.map { DayKey.make($0, calendar: dcal) } ?? "nil" }
+        func dhm(_ d: Date?) -> String {
+            guard let d else { return "nil" }
+            let c = dcal.dateComponents([.hour, .minute], from: d)
+            return String(format: "%02d:%02d", c.hour!, c.minute!)
+        }
+        let extractor = MessageExtractor(detector: detector, calendar: dcal, now: Date(),
                                          members: [FamilyMember(name: "Maya", role: .child, color: .purple)])
         let sentences = MessageExtractor.sentences(in: "Dr. Patel's office called. Picture day is Nov. 13! Pickup is at 3 p.m. Please be on time.\n• Bring a water bottle")
         check("Splits sentences without breaking “Dr.”, “Nov.” or “p.m.”",
               sentences == ["Dr. Patel's office called.", "Picture day is Nov. 13!", "Pickup is at 3 p.m.",
                             "Please be on time.", "Bring a water bottle"], "got \(sentences)")
 
-        let picture = extractor.suggestions(for: "Reminder: Picture day is Thursday, November 12!")
+        let picture = extractor.suggestions(for: "Reminder: Picture day is on November 12!")
         let pictureEvent = picture.first { $0.kind == .event }
         check("“Picture day is …” becomes an all-day event",
-              pictureEvent?.title == "Picture day" && pictureEvent?.isAllDay == true && key(pictureEvent?.date).hasSuffix("-11-12"),
-              "got \(picture.map { "\($0.kind) \($0.title) \(key($0.date))" })")
+              pictureEvent?.title == "Picture day" && pictureEvent?.isAllDay == true && dkey(pictureEvent?.date).hasSuffix("-11-12"),
+              "got \(picture.map { "\($0.kind) \($0.title) \(dkey($0.date))" })")
 
-        let slip = extractor.suggestions(for: "Please return Maya's signed permission slip by Friday, November 13.")
+        let slip = extractor.suggestions(for: "Please return Maya's signed permission slip by November 13.")
         let slipTask = slip.first { $0.kind == .task }
-        check("“Return … by Friday” becomes a to-do due that day",
-              slipTask?.title == "Return Maya's signed permission slip" && key(slipTask?.date).hasSuffix("-11-13")
+        check("“Return … by Nov 13” becomes a to-do due that day",
+              slipTask?.title == "Return Maya's signed permission slip" && dkey(slipTask?.date).hasSuffix("-11-13")
                 && !slip.contains { $0.kind == .event },
-              "got \(slip.map { "\($0.kind) \($0.title) \(key($0.date))" })")
+              "got \(slip.map { "\($0.kind) \($0.title) \(dkey($0.date))" })")
         check("Names in a message tag that child", slipTask?.memberIDs.count == 1)
 
         let concert = extractor.suggestions(for: "The winter concert will be on December 10 at 6:30 PM in the gym.")
         let concertEvent = concert.first { $0.kind == .event }
         check("Timed event keeps its time",
               concertEvent?.title == "Winter concert in the gym" && concertEvent?.isAllDay == false
-                && key(concertEvent?.date).hasSuffix("-12-10") && hm(concertEvent?.date) == "18:30",
-              "got \(concert.map { "\($0.kind) \($0.title) \(key($0.date)) \(hm($0.date))" })")
+                && dkey(concertEvent?.date).hasSuffix("-12-10") && dhm(concertEvent?.date) == "18:30",
+              "got \(concert.map { "\($0.kind) \($0.title) \(dkey($0.date)) \(dhm($0.date))" })")
 
         let fee = extractor.suggestions(for: "The field trip to the zoo costs $12, due by November 20.")
         let feeExpense = fee.first { $0.kind == .expense }
         let feeTask = fee.first { $0.kind == .task }
         check("A fee becomes an expense and a to-pay task",
               feeExpense?.amountCents == 1200 && feeExpense?.expenseCategory == .school
-                && feeTask?.title == "Pay for field trip to the zoo" && key(feeTask?.date).hasSuffix("-11-20"),
-              "got \(fee.map { "\($0.kind) \($0.title) \($0.amountCents ?? 0) \($0.expenseCategory) \(key($0.date))" })")
+                && feeTask?.title == "Pay for field trip to the zoo" && dkey(feeTask?.date).hasSuffix("-11-20"),
+              "got \(fee.map { "\($0.kind) \($0.title) \($0.amountCents ?? 0) \($0.expenseCategory) \(dkey($0.date))" })")
 
         let dues = extractor.suggestions(for: "Team dues are $35 — please pay by November 16.")
         check("Clause after a dash is dropped from titles",
@@ -161,23 +171,23 @@ enum SelfChecks {
                 && dues.contains { $0.kind == .expense && $0.title == "Team dues" && $0.expenseCategory == .activities },
               "got \(dues.map { "\($0.kind) \($0.title) \($0.expenseCategory)" })")
 
-        let flyerText = MessageExtractor.reflow(["SPRING PICTURE DAY", "Friday, November 13", "Order your package online",
+        let flyerText = MessageExtractor.reflow(["SPRING PICTURE DAY", "November 13", "Order your package online",
                                                  "by November 10. Retakes will be", "on December 2."])
         check("Photo text: wrapped lines rejoin, headings stay separate",
-              flyerText == "SPRING PICTURE DAY\nFriday, November 13\nOrder your package online by November 10. Retakes will be on December 2.",
+              flyerText == "SPRING PICTURE DAY\nNovember 13\nOrder your package online by November 10. Retakes will be on December 2.",
               "got \(flyerText.debugDescription)")
         let flyer = extractor.suggestions(for: flyerText)
         check("Flyer heading names the event on the next line's date",
-              flyer.contains { $0.kind == .event && $0.title == "Spring Picture Day" && key($0.date).hasSuffix("-11-13") }
-                && flyer.contains { $0.kind == .task && $0.title == "Order your package online" && key($0.date).hasSuffix("-11-10") },
-              "got \(flyer.map { "\($0.kind) \($0.title) \(key($0.date))" })")
+              flyer.contains { $0.kind == .event && $0.title == "Spring Picture Day" && dkey($0.date).hasSuffix("-11-13") }
+                && flyer.contains { $0.kind == .task && $0.title == "Order your package online" && dkey($0.date).hasSuffix("-11-10") },
+              "got \(flyer.map { "\($0.kind) \($0.title) \(dkey($0.date))" })")
 
         var inbox = FamilyData()
         var message = InboxMessage(body: "x")
         message.suggestions = picture + slip
         inbox.messages = [message]
         for s in message.suggestions {
-            inbox.accept(suggestionID: s.id, inMessage: message.id, calendar: cal, now: date(2026, 11, 9, 8))
+            inbox.accept(suggestionID: s.id, inMessage: message.id, calendar: dcal)
         }
         let madeEvent = inbox.events.first
         check("Accepting suggestions creates linked items and files the message",
